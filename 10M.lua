@@ -2,7 +2,7 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 
--- Find the main GUI by partial name match (adjust this if needed)
+-- Find the Chilli Hub GUI by partial name match (adjust if needed)
 local function findChilliHubGui()
     for _, gui in pairs(PlayerGui:GetChildren()) do
         if gui:IsA("ScreenGui") and gui.Name:find("Chilli Hub") then
@@ -38,14 +38,15 @@ end
 
 print("Found Job-ID Input TextBox! Ready to paste.")
 
--- Auto Paste toggle GUI setup
+-- Create the GUI for Auto Paste toggle
+
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "AutoJoinerGui"
 screenGui.Parent = PlayerGui
 
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 220, 0, 90)
-frame.Position = UDim2.new(0, 20, 0, 20)
+frame.Position = UDim2.new(0.5, -110, 0.5, -45)  -- Center of screen
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
 frame.Parent = screenGui
@@ -60,6 +61,16 @@ toggleBtn.TextSize = 18
 toggleBtn.Text = "Auto Paste: OFF"
 toggleBtn.Parent = frame
 
+local statusLabel = Instance.new("TextLabel")
+statusLabel.Size = UDim2.new(1, -20, 0, 30)
+statusLabel.Position = UDim2.new(0, 10, 0, 55)
+statusLabel.BackgroundTransparency = 1
+statusLabel.TextColor3 = Color3.new(1,1,1)
+statusLabel.Font = Enum.Font.SourceSans
+statusLabel.TextSize = 16
+statusLabel.Text = "Paste job IDs automatically."
+statusLabel.Parent = frame
+
 local autoPasteEnabled = false
 local latestJobCode = ""
 
@@ -67,8 +78,10 @@ toggleBtn.MouseButton1Click:Connect(function()
     autoPasteEnabled = not autoPasteEnabled
     if autoPasteEnabled then
         toggleBtn.Text = "Auto Paste: ON"
+        print("Auto Paste Enabled")
     else
         toggleBtn.Text = "Auto Paste: OFF"
+        print("Auto Paste Disabled")
     end
 end)
 
@@ -81,7 +94,7 @@ local function pasteJobId(code)
     end
 end
 
--- Polling loop to detect new job codes (simulate)
+-- Polling loop to detect new job codes (simulate clipboard updates)
 spawn(function()
     while true do
         wait(0.2)
@@ -92,6 +105,6 @@ spawn(function()
 end)
 
 --[[ 
--- For testing: set latestJobCode manually to paste
-latestJobCode = "UtKCQbvBZMjUQpNVLfwP9VtOItPOpNDOTHvB8VvVqMvVk1PQKLETAVkOyHlYG8uJqHPUSfNVNbkTuO3Y4xvPSAFN+HkUqHys"
+-- For testing: manually assign a Job-ID in the console:
+latestJobCode = "u0QCkRwBR1lUDfNVLRFRfVNXItPOfRDITNvPuVlCqMvV5tuPKjGUCVuBDHUB9RDJqHPUSfNVNbkTuO3Y4xvPSAFN+HkUqHys"
 --]]
