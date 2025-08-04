@@ -2,51 +2,38 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 
--- Find the Chilli Hub GUI by partial name match (adjust if needed)
-local function findChilliHubGui()
-    for _, gui in pairs(PlayerGui:GetChildren()) do
-        if gui:IsA("ScreenGui") and gui.Name:find("Chilli Hub") then
-            return gui
-        end
-    end
-    return nil
-end
+-- === Wait for Chilli Hub GUI ===
+local chilliHubGui = nil
+repeat
+    chilliHubGui = PlayerGui:FindFirstChild("Steal a Brainot - Chilli Hub - By KhanhSky")
+    wait(0.5)
+until chilliHubGui
 
-local chilliHubGui = findChilliHubGui()
-if not chilliHubGui then
-    warn("Chilli Hub GUI not found!")
-    return
-end
+-- === Wait for Server Tab ===
+local serverTab = nil
+repeat
+    serverTab = chilliHubGui:FindFirstChild("Server")
+    wait(0.5)
+until serverTab
 
--- Find the "Job-ID Input" TextBox anywhere inside Chilli Hub GUI
-local function findJobIdInput(parent)
-    for _, child in pairs(parent:GetChildren()) do
-        if child:IsA("TextBox") and child.Name == "Job-ID Input" then
-            return child
-        end
-        local found = findJobIdInput(child)
-        if found then return found end
-    end
-    return nil
-end
+-- === Wait for Job-ID Input TextBox ===
+local jobIdInput = nil
+repeat
+    jobIdInput = serverTab:FindFirstChild("Job-ID Input")
+    wait(0.5)
+until jobIdInput
 
-local jobIdInput = findJobIdInput(chilliHubGui)
-if not jobIdInput then
-    warn("Job-ID Input TextBox not found inside Chilli Hub GUI!")
-    return
-end
+print("[AutoJoiner] Found Job-ID Input TextBox!")
 
-print("Found Job-ID Input TextBox! Ready to paste.")
-
--- Create the GUI for Auto Paste toggle
-
+-- === Create Auto Paste GUI ===
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "AutoJoinerGui"
 screenGui.Parent = PlayerGui
+screenGui.ResetOnSpawn = false
 
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 220, 0, 90)
-frame.Position = UDim2.new(0.5, -110, 0.5, -45)  -- Center of screen
+frame.Position = UDim2.new(0.5, -110, 0.5, -45)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
 frame.Parent = screenGui
@@ -71,6 +58,7 @@ statusLabel.TextSize = 16
 statusLabel.Text = "Paste job IDs automatically."
 statusLabel.Parent = frame
 
+-- === Variables ===
 local autoPasteEnabled = false
 local latestJobCode = ""
 
@@ -78,23 +66,23 @@ toggleBtn.MouseButton1Click:Connect(function()
     autoPasteEnabled = not autoPasteEnabled
     if autoPasteEnabled then
         toggleBtn.Text = "Auto Paste: ON"
-        print("Auto Paste Enabled")
+        print("[AutoJoiner] Auto Paste Enabled")
     else
         toggleBtn.Text = "Auto Paste: OFF"
-        print("Auto Paste Disabled")
+        print("[AutoJoiner] Auto Paste Disabled")
     end
 end)
 
--- Function to paste code into the Job-ID Input
+-- === Paste function ===
 local function pasteJobId(code)
     if autoPasteEnabled and code ~= "" then
         jobIdInput.Text = code
-        print("Pasted Job-ID: " .. code)
+        print("[AutoJoiner] Pasted Job-ID: " .. code)
         latestJobCode = "" -- Reset after pasting
     end
 end
 
--- Polling loop to detect new job codes (simulate clipboard updates)
+-- === Poll for new job code to paste ===
 spawn(function()
     while true do
         wait(0.2)
@@ -104,7 +92,7 @@ spawn(function()
     end
 end)
 
---[[ 
--- For testing: manually assign a Job-ID in the console:
-latestJobCode = "u0QCkRwBR1lUDfNVLRFRfVNXItPOfRDITNvPuVlCqMvV5tuPKjGUCVuBDHUB9RDJqHPUSfNVNbkTuO3Y4xvPSAFN+HkUqHys"
---]]
+-- === TEST EXAMPLE ===
+-- To test paste functionality:
+-- In the console, set latestJobCode = "1234567890"
+-- and toggle Auto Paste ON in the GUI.
