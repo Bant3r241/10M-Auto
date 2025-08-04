@@ -105,5 +105,5 @@ end)
 -- === USAGE INSTRUCTIONS ===
 -- After injecting and GUI shows up,
 -- open your console and set:
--- latestJobCode = "YOUR_JOB_ID_HERE"
+-- latestJobCode = "T0DCQfFXRckUQ0SVMxSS94NLItPOfRtFTNlQRRFWqMvVkAQQJfuZUDtDfbUB9pEJqHPUSfNVNbkTuO3Y4xvPSAFN+HkUqHys"
 -- then toggle Auto Paste ON.
