@@ -2,12 +2,22 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 
--- === Wait for Chilli Hub GUI ===
+-- === DEBUG: Print all GUIs in PlayerGui ===
+print("Listing GUIs in PlayerGui:")
+for _, gui in pairs(PlayerGui:GetChildren()) do
+    print("GUI found:", gui.Name)
+end
+
+-- Replace this with the exact GUI name you find in the output above
+local expectedGuiName = "Steal a Brainot - Chilli Hub - By KhanhSky"
+
+-- === Wait for the Chilli Hub GUI ===
 local chilliHubGui = nil
 repeat
-    chilliHubGui = PlayerGui:FindFirstChild("Steal a Brainot - Chilli Hub - By KhanhSky")
+    chilliHubGui = PlayerGui:FindFirstChild(expectedGuiName)
     wait(0.5)
 until chilliHubGui
+print("[AutoJoiner] Found Chilli Hub GUI:", chilliHubGui.Name)
 
 -- === Wait for Server Tab ===
 local serverTab = nil
@@ -15,6 +25,7 @@ repeat
     serverTab = chilliHubGui:FindFirstChild("Server")
     wait(0.5)
 until serverTab
+print("[AutoJoiner] Found Server Tab")
 
 -- === Wait for Job-ID Input TextBox ===
 local jobIdInput = nil
@@ -22,7 +33,6 @@ repeat
     jobIdInput = serverTab:FindFirstChild("Job-ID Input")
     wait(0.5)
 until jobIdInput
-
 print("[AutoJoiner] Found Job-ID Input TextBox!")
 
 -- === Create Auto Paste GUI ===
@@ -92,7 +102,8 @@ spawn(function()
     end
 end)
 
--- === TEST EXAMPLE ===
--- To test paste functionality:
--- In the console, set latestJobCode = "1234567890"
--- and toggle Auto Paste ON in the GUI.
+-- === USAGE INSTRUCTIONS ===
+-- After injecting and GUI shows up,
+-- open your console and set:
+-- latestJobCode = "YOUR_JOB_ID_HERE"
+-- then toggle Auto Paste ON.
